@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.accounts.models import CreateUserModel
-from apps.accounts.serializer import UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer
+from apps.accounts.serializer import UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, \
+    UserProfileDetailSerializer
 
 
 class UserRegisterAPIView(generics.GenericAPIView):
@@ -47,3 +48,59 @@ class UserLoginAPIView(generics.GenericAPIView):
             return Response(data=tokens,status=status.HTTP_200_OK)
         else:
             return Response(data=serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileDetailPutPatchDeleteAPIView(APIView):
+    serializer_class = UserProfileDetailSerializer
+    model = CreateUserModel
+
+    def put(self,request,pk):
+        try:
+            user = CreateUserModel.objects.get(pk=pk)
+        except CreateUserModel.DoesNotExist:
+            return Response({"errors":"User not found"},status=404)
+
+        serializer = UserProfileDetailSerializer(instance=user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message":"User updated","data":serializer.data},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_200_OK
+            )
+
+
+    def patch(self,request,pk):
+        try:
+            user = CreateUserModel.objects.get(pk=pk)
+        except CreateUserModel.DoesNotExist:
+            return Response({"errors":"User not found"},status=404)
+
+        serializer = UserProfileDetailSerializer(instance=user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "User updated", "data": serializer.data},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_200_OK
+            )
+
+
+    def delete(self,request,pk):
+        try:
+            user = CreateUserModel.objects.get(pk=pk)
+        except CreateUserModel.DoesNotExist:
+            return Response({"errors":"User not found"},status=404)
+
+        user.delete()
+        return Response({'message': 'User deleted successfully'})

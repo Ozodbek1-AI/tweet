@@ -44,3 +44,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = CreateUserModel
         fields = ['id','username','first_name','last_name','email','phone']
 
+
+class UserProfileDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreateUserModel
+        fields = ['id','username','first_name','last_name','email','phone']
+        read_only_fields = ['created_at']
+
