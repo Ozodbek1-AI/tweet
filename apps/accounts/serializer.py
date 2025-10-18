@@ -17,6 +17,39 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = CreateUserModel.objects.create_user(**validated_data)
         return user
 
+    def validate_username(self,value):
+        if len(value) < 0:
+            raise serializers.ValidationError("Username must not be empty.")
+        return value
+
+    def validate_email(self,value:str):
+        if value.endswith("@gmail.com"):
+            raise serializers.ValidationError("Email must end with @gmail.com")
+        return value
+
+    def validate_password(self,value):
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be longer than 8 characters.")
+        return value
+
+    def validate_first_name(self,value:str):
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("First name should not contain a number.")
+        return value
+
+    def validate_last_name(self,value:str):
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("Last name should not contain a number.")
+        return value
+
+    def validate_phone(self,value:str):
+        if len(value) < 12:
+            raise serializers.ValidationError("Phone number must be 13 digits long")
+        if not value.startswith("+998"):
+            raise serializers.ValidationError("Phone number start with '+998'")
+        return value
+
+
 
 class UserLoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
@@ -50,4 +83,37 @@ class UserProfileDetailSerializer(serializers.ModelSerializer):
         model = CreateUserModel
         fields = ['id','username','first_name','last_name','email','phone']
         read_only_fields = ['created_at']
+
+
+    def validate_username(self,value):
+        if len(value) < 0:
+            raise serializers.ValidationError("Username must not be empty.")
+        return value
+
+    def validate_email(self,value:str):
+        if value.endswith("@gmail.com"):
+            raise serializers.ValidationError("Email must end with @gmail.com")
+        return value
+
+    def validate_password(self,value):
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be longer than 8 characters.")
+        return value
+
+    def validate_first_name(self,value:str):
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("First name should not contain a number.")
+        return value
+
+    def validate_last_name(self,value:str):
+        if any(char.isdigit() for char in value):
+            raise serializers.ValidationError("Last name should not contain a number.")
+        return value
+
+    def validate_phone(self,value:str):
+        if len(value) < 12:
+            raise serializers.ValidationError("Phone number must be 13 digits long")
+        if not value.startswith("+998"):
+            raise serializers.ValidationError("Phone number start with '+998'")
+        return value
 
