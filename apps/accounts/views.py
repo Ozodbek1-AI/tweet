@@ -54,6 +54,8 @@ class UserProfileDetailPutPatchDeleteAPIView(APIView):
     serializer_class = UserProfileDetailSerializer
     model = CreateUserModel
 
+
+    @swagger_auto_schema(request_body=UserProfileDetailSerializer)
     def put(self,request,pk):
         try:
             user = CreateUserModel.objects.get(pk=pk)
@@ -74,7 +76,7 @@ class UserProfileDetailPutPatchDeleteAPIView(APIView):
                 status=status.HTTP_200_OK
             )
 
-
+    @swagger_auto_schema(request_body=UserProfileDetailSerializer)
     def patch(self,request,pk):
         try:
             user = CreateUserModel.objects.get(pk=pk)
