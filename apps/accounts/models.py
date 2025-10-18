@@ -4,7 +4,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
 class CreateUserModel(AbstractUser):
-    full_name = models.CharField(max_length=128)
     phone = models.CharField(max_length=128)
 
     def get_tokens(self):

@@ -7,7 +7,8 @@ from apps.accounts.models import CreateUserModel
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreateUserModel
-        fields = ['username','email','password','full_name','phone']
+        fields = ['id','username','email','password','first_name','last_name','phone']
+        read_only_fields = ['id']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -36,4 +37,10 @@ class UserLoginSerializer(serializers.ModelSerializer):
         else:
             attrs['user'] = user
             return attrs
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreateUserModel
+        fields = ['id','username','first_name','last_name','email','phone']
 
