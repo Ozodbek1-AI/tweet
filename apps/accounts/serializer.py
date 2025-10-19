@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from apps.accounts.models import CreateUserModel
+from apps.pages.models import Tweet
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -72,16 +73,24 @@ class UserLoginSerializer(serializers.ModelSerializer):
             return attrs
 
 
+class UserTweetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tweet
+        fields = ['content','like','created_at']
+        read_only_fields = ['created_at']
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    tweet = UserTweetSerializer(many=True,read_only=True)
     class Meta:
         model = CreateUserModel
-        fields = ['id','username','first_name','last_name','email','phone']
+        fields = ['id','username','first_name','last_name','email','phone','tweet']
 
 
 class UserProfileDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CreateUserModel
-        fields = ['id','username','first_name','last_name','email','phone']
+        fields = ['id','username','first_name','last_name','email','phone','created_at']
         read_only_fields = ['created_at']
 
 

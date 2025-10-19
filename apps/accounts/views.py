@@ -1,6 +1,7 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -26,6 +27,7 @@ class UserRegisterAPIView(generics.GenericAPIView):
 class UserProfileAPIView(generics.GenericAPIView):
     queryset = CreateUserModel.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self,request,pk):
         try:
@@ -73,7 +75,7 @@ class UserProfileDetailPutPatchDeleteAPIView(APIView):
         else:
             return Response(
                 serializer.errors,
-                status=status.HTTP_200_OK
+                status=status.HTTP_400_BAD_REQUEST
             )
 
     @swagger_auto_schema(request_body=UserProfileDetailSerializer)

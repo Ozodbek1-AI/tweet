@@ -39,6 +39,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/accounts/', include('apps.accounts.urls',namespace='accounts')),
     path('api/pages/', include('apps.pages.urls',namespace='pages')),
+    path('api/comments/', include('apps.comments.urls',namespace='comments')),
     # Swagger URL-lar
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
